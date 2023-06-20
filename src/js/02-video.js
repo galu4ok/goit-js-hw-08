@@ -18,11 +18,11 @@ import throttle from 'lodash.throttle';
 const iframe = document.querySelector('iframe');
 const player = new Player(iframe);
 
-const updatePlayerTime = ({ seconds }) => {
+const updatedPlayerTime = ({ seconds }) => {
   localStorage.setItem('videoplayer-current-time', JSON.stringify(seconds));
 };
 
-player.on('timeupdate', throttle(updatePlayerTime, 1000));
+player.on('timeupdate', throttle(updatedPlayerTime, 1000));
 
 const savedPlayerTime = localStorage.getItem('videoplayer-current-time');
 player.setCurrentTime(JSON.parse(savedPlayerTime) || 0);

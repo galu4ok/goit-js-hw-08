@@ -9,3 +9,48 @@
 // їхніми поточними значеннями.
 // 4) Зроби так, щоб сховище оновлювалось не частіше, ніж раз на 500 мілісекунд.
 // Для цього додай до проекту і використовуй бібліотеку lodash.throttle.
+
+import throttle from 'lodash.throttle';
+const form = document.querySelector('.feedback-form');
+
+form.addEventListener('input', onTextareaInput);
+form.addEventListener('submit', throttle(onFormSubmit, 500));
+
+onClickPageReload();
+
+function onTextareaInput(evt) {
+  const { email, message } = evt.currentTarget.elements;
+  const feedbackFormState = {
+    email: email.value.trim(),
+    message: message.value,
+  };
+  localStorage.setItem(
+    'feedback-form-state',
+    JSON.stringify(feedbackFormState)
+  );
+}
+
+function onClickPageReload() {
+  const storageData =
+    JSON.parse(localStorage.getItem('feedback-form-state')) || {};
+  const { email, message } = storageData;
+  if (storageData) {
+    form.elements.email.value = email || '';
+    form.elements.message.value = message || '';
+  }
+}
+
+function onFormSubmit(evt) {
+  evt.preventDefault();
+
+  const { email, message } = evt.currentTarget.elements;
+  const userEmail = email.value.trim();
+  const userMessage = message.value;
+  const feedbackFormData = { userEmail, message };
+  if (email.value === '' || message.value === '') {
+    return alert('Please fill in all the fields!');
+  }
+
+  localStorage.removeItem('feedback-form-state');
+  evt.currentTarget.reset();
+}
