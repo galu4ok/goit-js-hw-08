@@ -44,12 +44,15 @@ function onFormSubmit(evt) {
   evt.preventDefault();
 
   const { email, message } = evt.currentTarget.elements;
-  const userEmail = email.value.trim();
-  const userMessage = message.value;
-  const feedbackFormData = { userEmail, message };
+
   if (email.value === '' || message.value === '') {
     return alert('Please fill in all the fields!');
   }
+
+  console.log({
+    email: email.value.trim(),
+    message: message.value,
+  });
 
   localStorage.removeItem('feedback-form-state');
   evt.currentTarget.reset();
